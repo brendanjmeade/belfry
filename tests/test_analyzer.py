@@ -1,4 +1,4 @@
-"""Tests for rab.analyzer.analyze() against the documented contract.
+"""Tests for belfry.analyzer.analyze() against the documented contract.
 
 These tests treat the analyzer as a black box: they parse small fixture
 scripts (never executing them) and assert the static-analysis facts the
@@ -12,11 +12,11 @@ from pathlib import Path
 
 import pytest
 
-# Make rab importable whether or not it is pip-installed (editable or not).
+# Make belfry importable whether or not it is pip-installed (editable or not).
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
-from rab.analyzer import analyze  # noqa: E402
-from rab.models import ScriptInfo  # noqa: E402
+from belfry.analyzer import analyze  # noqa: E402
+from belfry.models import ScriptInfo  # noqa: E402
 
 FIXTURES = Path(__file__).parent / "fixtures"
 
@@ -228,7 +228,7 @@ def test_var_paths_json_named_load_not_an_input():
 def test_render_fstring_format_spec_marks_unresolved():
     import ast
 
-    from rab.analyzer import render_path
+    from belfry.analyzer import render_path
 
     node = ast.parse('f"out_{N:04d}.csv"', mode="eval").body
     raw, resolved, kind = render_path(node, {"N": "42"})
@@ -240,7 +240,7 @@ def test_render_fstring_format_spec_marks_unresolved():
 def test_render_fstring_plain_constant_resolves():
     import ast
 
-    from rab.analyzer import render_path
+    from belfry.analyzer import render_path
 
     node = ast.parse('f"out_{N}.csv"', mode="eval").body
     raw, resolved, _ = render_path(node, {"N": "42"})
@@ -251,7 +251,7 @@ def test_render_fstring_plain_constant_resolves():
 def test_string_join_not_treated_as_path_join():
     import ast
 
-    from rab.analyzer import render_path
+    from belfry.analyzer import render_path
 
     node = ast.parse('",".join(parts)', mode="eval").body
     raw, resolved, _ = render_path(node, {})

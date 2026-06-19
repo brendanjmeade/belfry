@@ -1,6 +1,6 @@
-"""Shared data structures for rab (the contract every module conforms to).
+"""Shared data structures for belfry (the contract every module conforms to).
 
-Every other rab module imports the dataclasses defined here. Do NOT change the
+Every other belfry module imports the dataclasses defined here. Do NOT change the
 public field names or signatures of these classes when implementing other
 modules; conform to them.
 """

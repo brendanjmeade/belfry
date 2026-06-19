@@ -1,6 +1,6 @@
-"""Command-line entry point for rab.
+"""Command-line entry point for belfry.
 
-Registered as the ``rab`` console script (see pyproject). Resolves the target
+Registered as the ``belfry`` console script (see pyproject). Resolves the target
 directory, then launches the Textual TUI rooted there.
 """
 from __future__ import annotations
@@ -12,7 +12,7 @@ from pathlib import Path
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        prog="rab",
+        prog="belfry",
         description="Ring a Bell -- a TUI for rediscovering what your Python scripts do.",
     )
     parser.add_argument(
@@ -36,15 +36,15 @@ def main(argv: list[str] | None = None) -> int:
 
     path: Path = args.path.expanduser().resolve()
     if not path.exists():
-        print(f"rab: error: path does not exist: {path}", file=sys.stderr)
+        print(f"belfry: error: path does not exist: {path}", file=sys.stderr)
         return 2
     if not path.is_dir():
-        print(f"rab: error: not a directory: {path}", file=sys.stderr)
+        print(f"belfry: error: not a directory: {path}", file=sys.stderr)
         return 2
 
     # Import here so --help works even if textual/deps are mid-install.
-    from rab.app import RabApp
+    from belfry.app import BelfryApp
 
-    app = RabApp(root=path, recurse=not args.no_recurse)
+    app = BelfryApp(root=path, recurse=not args.no_recurse)
     app.run()
     return 0

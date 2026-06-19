@@ -1,13 +1,13 @@
-"""Tests for rab.scanner discovery, focused on the fallback walk."""
+"""Tests for belfry.scanner discovery, focused on the fallback walk."""
 from __future__ import annotations
 
 import sys
 from pathlib import Path
 
-# Make rab importable whether or not it is pip-installed (editable or not).
+# Make belfry importable whether or not it is pip-installed (editable or not).
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
-from rab.scanner import _discover_walk  # noqa: E402
+from belfry.scanner import _discover_walk  # noqa: E402
 
 
 def test_walk_ignores_only_below_root(tmp_path: Path):

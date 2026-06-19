@@ -1,4 +1,4 @@
-"""The rab Textual application (lazygit-inspired layout).
+"""The belfry Textual application (lazygit-inspired layout).
 
 A two-pane TUI: a file list on the left, and a tabbed Summary / Source view on
 the right. Static analysis and git lookups are performed lazily as files are
@@ -25,10 +25,10 @@ from textual.widgets import (
     TabPane,
 )
 
-from rab.analyzer import analyze
-from rab.gitinfo import last_commit
-from rab.models import ArgSpec, FileRecord, FileRef, ScriptInfo
-from rab.scanner import discover
+from belfry.analyzer import analyze
+from belfry.gitinfo import last_commit
+from belfry.models import ArgSpec, FileRecord, FileRef, ScriptInfo
+from belfry.scanner import discover
 
 
 def _short_date(mtime: float) -> str:
@@ -53,8 +53,8 @@ def _cheap_badge(path: Path) -> str:
     return "script"
 
 
-class RabApp(App):
-    """The rab TUI application."""
+class BelfryApp(App):
+    """The belfry TUI application."""
 
     CSS = """
     #body {
@@ -512,7 +512,7 @@ class RabApp(App):
             try:
                 subprocess.run([editor, str(path)])
             except Exception as exc:  # editor missing / failed -> report, resume
-                print(f"rab: could not launch editor {editor!r}: {exc}")
+                print(f"belfry: could not launch editor {editor!r}: {exc}")
         # Source may have changed on disk; drop caches for this file.
         self._info_cache.pop(path, None)
         if rel:

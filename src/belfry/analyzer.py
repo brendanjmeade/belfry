@@ -1,7 +1,7 @@
 """Static analysis of a single Python script (the correctness-critical core).
 
 `analyze(path)` reads a script's source, parses it with :mod:`ast`, and returns a
-fully populated :class:`~rab.models.ScriptInfo`. It NEVER executes the target
+fully populated :class:`~belfry.models.ScriptInfo`. It NEVER executes the target
 script -- everything is derived from the AST and the raw text.
 
 Results are cached at module level keyed by ``(str(path), mtime)`` so repeated
@@ -13,7 +13,7 @@ import ast
 import re
 from pathlib import Path
 
-from rab.models import ArgInfo, ArgSpec, FileRef, ScriptInfo
+from belfry.models import ArgInfo, ArgSpec, FileRef, ScriptInfo
 
 # --------------------------------------------------------------------------- #
 # Cache

@@ -3,7 +3,7 @@ requires = ["setuptools>=61"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "rab"
+name = "belfry"
 version = "0.1.0"
 description = "Ring a Bell -- a TUI for rediscovering what your Python scripts do"
 readme = "README.md"
@@ -14,7 +14,7 @@ dependencies = ["textual>=0.60"]
 dev = ["pytest"]
 
 [project.scripts]
-rab = "rab.cli:main"
+belfry = "belfry.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

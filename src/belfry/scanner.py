@@ -1,4 +1,4 @@
-"""Discover the .py files rab should analyze.
+"""Discover the .py files belfry should analyze.
 
 The scanner prefers git for enumeration so it natively honors .gitignore and
 picks up new-but-not-ignored files. When the target is not inside a git repo
@@ -10,7 +10,7 @@ from __future__ import annotations
 import subprocess
 from pathlib import Path
 
-from rab.models import FileRecord
+from belfry.models import FileRecord
 
 # Directory components skipped by the filesystem-walk fallback.
 _IGNORE_DIRS = {

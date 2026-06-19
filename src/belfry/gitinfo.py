@@ -10,7 +10,7 @@ from __future__ import annotations
 import subprocess
 from pathlib import Path
 
-from rab.models import GitInfo
+from belfry.models import GitInfo
 
 # ASCII unit separator (0x1f) keeps the format unambiguous vs. commit text.
 _FORMAT = "%h%x1f%cs%x1f%s"
