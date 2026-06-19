@@ -11,8 +11,8 @@ import subprocess
 from datetime import datetime
 from pathlib import Path
 
-from rich.markup import escape
 from rich.syntax import Syntax
+from rich.text import Text
 from textual.app import App, ComposeResult
 from textual.binding import Binding
 from textual.containers import Vertical, VerticalScroll
@@ -199,7 +199,7 @@ class BelfryApp(App):
 
     def _show_empty(self, message: str) -> None:
         self.query_one("#sec_git", Static).update("")
-        self.query_one("#sec_desc", Static).update(f"[dim]{escape(message)}[/dim]")
+        self.query_one("#sec_desc", Static).update(Text(message, style="dim"))
         self.query_one("#sec_args", Static).update("")
         self.query_one("#sec_inputs", Static).update("")
         self.query_one("#sec_outputs", Static).update("")
@@ -249,11 +249,14 @@ class BelfryApp(App):
 
         # Backfill the real badge now that we have a parse.
         self._update_badge(rel, info.badge)
-        self._render_git(path)
-        self._render_description(info)
-        self._render_args(info)
-        self._render_inputs(info.inputs)
-        self._render_outputs(info.outputs)
+        try:
+            self._render_git(path)
+            self._render_description(info)
+            self._render_args(info)
+            self._render_inputs(info.inputs)
+            self._render_outputs(info.outputs)
+        except Exception as exc:  # a render bug must never crash the app
+            self._set_summary_error(f"render error: {type(exc).__name__}: {exc}")
         self._render_source(path, info)
 
     def _update_badge(self, rel: str, badge: str) -> None:
@@ -266,93 +269,104 @@ class BelfryApp(App):
     # ------------------------------------------------------- section renderers
     def _set_summary_error(self, message: str) -> None:
         self.query_one("#sec_git", Static).update("")
-        self.query_one("#sec_desc", Static).update(
-            f"[bold red]ANALYSIS ERROR[/bold red]\n{escape(message)}"
-        )
+        t = Text()
+        t.append("ANALYSIS ERROR\n", style="bold red")
+        t.append(message)
+        self.query_one("#sec_desc", Static).update(t)
         self.query_one("#sec_args", Static).update("")
         self.query_one("#sec_inputs", Static).update("")
         self.query_one("#sec_outputs", Static).update("")
 
     def _render_git(self, path: Path) -> None:
         git = self._get_git(path)
+        t = Text()
+        t.append("GIT / PROVENANCE\n", style="bold")
         if git is None:
             try:
                 mtime = path.stat().st_mtime
             except OSError:
                 mtime = 0.0
-            line = (
-                "[bold]GIT / PROVENANCE[/bold]\n"
-                f"[dim]untracked / not a git repo -- modified {_short_date(mtime)}[/dim]"
+            t.append(
+                f"untracked / not a git repo -- modified {_short_date(mtime)}",
+                style="dim",
             )
         else:
-            line = (
-                "[bold]GIT / PROVENANCE[/bold]\n"
-                f"[yellow]{escape(git.short_hash)}[/yellow]  "
-                f"{escape(git.date)}  {escape(git.subject)}"
-            )
-        self.query_one("#sec_git", Static).update(line)
+            t.append(git.short_hash, style="yellow")
+            t.append(f"  {git.date}  {git.subject}")
+        self.query_one("#sec_git", Static).update(t)
 
     def _render_description(self, info: ScriptInfo) -> None:
-        parts: list[str] = ["[bold]DESCRIPTION[/bold]"]
-        body: list[str] = []
+        t = Text()
+        t.append("DESCRIPTION\n", style="bold")
         if info.docstring:
-            body.append(escape(info.docstring.strip()))
+            t.append(info.docstring.strip())
         if info.lead_comments:
-            body.append(f"[dim]{escape(info.lead_comments.strip())}[/dim]")
-        if not body:
-            body.append("[dim](no docstring)[/dim]")
-        parts.append("\n\n".join(body))
-        self.query_one("#sec_desc", Static).update("\n".join(parts))
+            if info.docstring:
+                t.append("\n\n")
+            t.append(info.lead_comments.strip(), style="dim")
+        if not info.docstring and not info.lead_comments:
+            t.append("(no docstring)", style="dim")
+        self.query_one("#sec_desc", Static).update(t)
 
     def _render_args(self, info: ScriptInfo) -> None:
         spec: ArgSpec = info.args
-        lines: list[str] = ["[bold]ARGUMENTS[/bold]"]
-        lines.append(f"[cyan]style:[/cyan] {escape(spec.style)}")
+        t = Text()
+        t.append("ARGUMENTS\n", style="bold")
+        t.append("style: ", style="cyan")
+        t.append(spec.style)
 
         if spec.args:
             for a in spec.args:
-                bits = [f"[green]{escape(a.name)}[/green]"]
+                t.append("\n  ")
+                t.append(a.name, style="green")
                 if a.type:
-                    bits.append(f"[magenta][{escape(a.type)}][/magenta]")
+                    t.append(f"  [{a.type}]", style="magenta")
                 if a.default is not None:
-                    bits.append(f"[dim](default={escape(a.default)})[/dim]")
+                    t.append(f"  (default={a.default})", style="dim")
                 if a.required:
-                    bits.append("[red](required)[/red]")
+                    t.append("  (required)", style="red")
                 if a.choices:
-                    bits.append(f"[dim]choices={escape(', '.join(a.choices))}[/dim]")
-                head = "  ".join(bits)
+                    t.append(f"  choices={', '.join(a.choices)}", style="dim")
                 if a.help:
-                    head += f"  -- {escape(a.help)}"
-                lines.append(f"  {head}")
+                    t.append(f"  -- {a.help}")
         else:
-            lines.append("  [dim](none found)[/dim]")
+            t.append("\n  ")
+            t.append("(none found)", style="dim")
 
         for note in spec.notes:
-            lines.append(f"  [dim]note: {escape(note)}[/dim]")
+            t.append("\n  ")
+            t.append(f"note: {note}", style="dim")
 
         # For cell scripts / no formal CLI, surface the constant "knobs",
         # one per line for easy reading.
         if spec.style in ("none", "cell-script") and info.constants:
-            lines.append("  [cyan]Knobs:[/cyan]")
+            t.append("\n  ")
+            t.append("Knobs:", style="cyan")
             for k, v in info.constants.items():
-                lines.append(f"    [green]{escape(k)}[/green] = {escape(v)}")
+                t.append("\n    ")
+                t.append(k, style="green")
+                t.append(f" = {v}")
 
-        self.query_one("#sec_args", Static).update("\n".join(lines))
+        self.query_one("#sec_args", Static).update(t)
 
-    def _render_filerefs(self, header: str, refs: list[FileRef]) -> str:
-        lines = [f"[bold]{header}[/bold]"]
+    def _render_filerefs(self, header: str, refs: list[FileRef]) -> Text:
+        t = Text()
+        t.append(header + "\n", style="bold")
         if not refs:
-            lines.append("  [dim](none found)[/dim]")
-            return "\n".join(lines)
-        for r in refs:
-            line = (
-                f"  [white]{escape(r.raw)}[/white]   "
-                f"[dim][{escape(r.func)}, line {r.lineno}][/dim]"
-            )
+            t.append("  ")
+            t.append("(none found)", style="dim")
+            return t
+        for i, r in enumerate(refs):
+            if i:
+                t.append("\n")
+            func = r.func if len(r.func) <= 48 else r.func[:47] + "…"
+            t.append("  ")
+            t.append(r.raw, style="white")
+            t.append("   ")
+            t.append(f"[{func}, line {r.lineno}]", style="dim")
             if not r.resolved:
-                line += " [dim](unresolved)[/dim]"
-            lines.append(line)
-        return "\n".join(lines)
+                t.append(" (unresolved)", style="dim")
+        return t
 
     def _render_inputs(self, refs: list[FileRef]) -> None:
         self.query_one("#sec_inputs", Static).update(
@@ -369,7 +383,7 @@ class BelfryApp(App):
             source = path.read_text(encoding="utf-8", errors="replace")
         except OSError as exc:
             self.query_one("#source", Static).update(
-                f"[red]could not read source: {escape(str(exc))}[/red]"
+                Text(f"could not read source: {exc}", style="red")
             )
             return
         syntax = Syntax(
