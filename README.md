@@ -1,6 +1,6 @@
 # belfry
 
-**Ring a bell.** A [Textual](https://github.com/Textualize/textual) TUI for
+A [Textual](https://github.com/Textualize/textual) TUI for
 rediscovering what your Python scripts actually do.
 
 ![belfry in action](https://raw.githubusercontent.com/brendanjmeade/belfry/main/docs/screenshot.png)
@@ -10,8 +10,6 @@ analyses, throwaway one-offs, and half-remembered experiments. Which ones take
 arguments? What files do they read? What do they write? `belfry` answers those
 questions at a glance, without you opening a single file.
 
-A *belfry* is a bell tower — and, as in "bats in the belfry," a place where
-things hang half-forgotten until you go and ring them.
 
 ## What it shows
 
@@ -46,14 +44,12 @@ mtime when a file is untracked or you're not in a git repo.
 
 ## Install
 
-belfry is not on PyPI yet. Install from source:
-
 ```bash
-git clone git@github.com:brendanjmeade/belfry.git
-cd belfry
-pip install -e .
+```
+pip install belfry
 ```
 
+```
 Requires Python 3.10+ (the only runtime dependency is `textual`).
 
 ## Usage
@@ -88,7 +84,3 @@ pytest
 
 The static analyzer (`src/belfry/analyzer.py`) is covered by a focused test
 suite with fixtures for each pattern it handles.
-
-## License
-
-Not yet licensed — a license will be added before the first release.
