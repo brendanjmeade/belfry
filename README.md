@@ -3,7 +3,7 @@
 **Ring a bell.** A [Textual](https://github.com/Textualize/textual) TUI for
 rediscovering what your Python scripts actually do.
 
-![belfry in action](docs/screenshot.png)
+![belfry in action](https://raw.githubusercontent.com/brendanjmeade/belfry/main/docs/screenshot.png)
 
 You know the folder: dozens of `.py` files accumulated over months — mainline
 analyses, throwaway one-offs, and half-remembered experiments. Which ones take

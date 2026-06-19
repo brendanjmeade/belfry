@@ -1,17 +1,40 @@
 [build-system]
-requires = ["setuptools>=61"]
+requires = ["setuptools>=77"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "belfry"
 version = "0.1.0"
-description = "Ring a Bell -- a TUI for rediscovering what your Python scripts do"
+description = "A Textual TUI for rediscovering what your Python scripts do — their arguments, inputs, and outputs"
 readme = "README.md"
 requires-python = ">=3.10"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Brendan Meade", email = "brendanjmeade@gmail.com" }]
+keywords = ["tui", "textual", "scripts", "static-analysis", "ast", "developer-tools", "cli"]
 dependencies = ["textual>=0.60"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development",
+    "Topic :: Utilities",
+]
 
 [project.optional-dependencies]
 dev = ["pytest"]
+
+[project.urls]
+Homepage = "https://github.com/brendanjmeade/belfry"
+Repository = "https://github.com/brendanjmeade/belfry"
+Issues = "https://github.com/brendanjmeade/belfry/issues"
 
 [project.scripts]
 belfry = "belfry.cli:main"
