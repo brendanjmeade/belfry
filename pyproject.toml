@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "belfry"
-version = "0.1.0"
+dynamic = ["version"]
 description = "A Textual TUI for rediscovering what your Python scripts do — their arguments, inputs, and outputs"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -41,3 +41,7 @@ belfry = "belfry.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+# Single source of truth for the version: src/belfry/__init__.py (__version__).
+[tool.setuptools.dynamic]
+version = { attr = "belfry.__version__" }
