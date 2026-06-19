@@ -26,12 +26,8 @@ It even resolves f-strings and `Path(...)` expressions, so `f"./runs/{RUN_NAME}/
 
 ## Install
 
-```bash
-```
-pip install belfry
-```
+`pip install belfry`
 
-```
 Requires Python 3.10+ (the only runtime dependency is `textual`).
 
 ## Usage
