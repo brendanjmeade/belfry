@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rab"
+version = "0.1.0"
+description = "Ring a Bell -- a TUI for rediscovering what your Python scripts do"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = ["textual>=0.60"]
+
+[project.optional-dependencies]
+dev = ["pytest"]
+
+[project.scripts]
+rab = "rab.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
