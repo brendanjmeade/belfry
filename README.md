@@ -4,7 +4,7 @@ A [Textual](https://github.com/Textualize/textual) TUI for rediscovering what yo
 
 ![belfry in action](https://raw.githubusercontent.com/brendanjmeade/belfry/main/docs/screenshot.png)
 
-We all have folders full of `.py` files accumulated over months. These often include some combination of   mainline analyses, throwaway one-offs, and half-remembered experiments. Which ones take arguments? What files do they read? What do they write? `belfry` answers those questions at a glance, without you opening a single file.
+We all have folders full of `.py` files accumulated over months. Sometimes we've created these and in modern times coding agents often do.  These often include some combination of   mainline analyses, throwaway one-offs, and half-remembered experiments. Which ones take arguments? What files do they read? What do they write? `belfry` answers those questions at a glance, without you opening a single file.
 
 ## What it shows
 
