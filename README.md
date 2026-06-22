@@ -2,8 +2,7 @@
 
 A [Textual](https://github.com/Textualize/textual) TUI for rediscovering what your Python scripts actually do.
 
-![belfry in action](https://raw.githubusercontent.com/brendanjmeade/belfry/main/docs/screenshot.png)
-
+![belfry in action](https://raw.githubusercontent.com/brendanjmeade/belfry/main/belfry_demo.gif)
 
 We all have folders full of `.py` files accumulated over months. Sometimes we've created these and in modern times coding agents often do.  These often include some combination of   mainline analyses, throwaway one-offs, and half-remembered experiments. Which ones take arguments? What files do they read? What do they write? `belfry` answers those questions at a glance, without you opening a single file.
 
